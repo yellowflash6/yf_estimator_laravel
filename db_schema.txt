@@ -1,0 +1,18 @@
+project
+--------
+id
+name
+status
+
+tasks
+--------
+id
+project_id (M2O -> project)
+name
+description
+dev_code_estimate
+dev_review_estimate
+dev_analysis_estimate
+sw_config_estimate
+documentation_estimate
+testing_estimate

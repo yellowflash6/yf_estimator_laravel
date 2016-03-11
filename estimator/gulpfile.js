@@ -12,5 +12,14 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.sass('app.scss');
+    mix.sass('app.scss')
+    .scripts([
+            // Combine all js files into one.
+            // Path is relative to resource/js folder.
+            '../../bower_components/jquery/dist/jquery.min.js',
+            '../../bower_components/velocity/velocity.min.js',
+            '../../bower_components/moment/min/moment-with-locales.min.js',
+            '../../bower_components/angular/angular.min.js',
+            '../../bower_components/lumx/dist/lumx.min.js',
+        ], 'public/js/app.js');
 });

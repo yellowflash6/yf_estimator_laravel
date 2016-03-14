@@ -14,17 +14,6 @@
 		</div>
 		<input type="hidden" id="csrfToken" name="_token" value="{{ csrf_token() }}">
 		<div class="table-responsive">
-			<!-- <table class="table table-hover">
-				<thead>
-					<tr>
-						<th>#</th>
-						<th>Name</th>
-						<th>Total Tasks</th>
-						<th>Total Man Hours</th>
-						<th>Total Man Days</th>
-					</tr>
-				</thead>
-			</table> -->
 			<table id="grid-basic" class="table table-condensed table-hover table-striped">
 				<thead>
 					<tr>
@@ -38,7 +27,7 @@
 						<th data-column-id="commands" data-formatter="commands" data-sortable="false">Options</th>
 					</tr>
 				</thead>
-		</table>  
+			</table>  
 		</div>
 	</div>
 </div>
@@ -70,7 +59,6 @@
 		    /* Executes after data is loaded and rendered */
 		    grid.find(".command-edit").on("click", function(e)
 		    {
-		    	//alert("You pressed edit on row: " + $(this).data("row-id"));
 		    	location.assign("/projects/"+$(this).data("row-id"));
 
 		    }).end().find(".command-delete").on("click", function(e)
@@ -99,7 +87,7 @@
       modules : 'security'
     });
 </script>
-<!-- ==================================================== Start Add Offers Modal ========================================================================================== -->
+<!-- ==================================================== Start Add Project Modal ========================================================================================== -->
 <div class="modal fade" id="modalAddProject" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -128,5 +116,5 @@
     </div>
   </div>
 </div>
-<!-- ==================================================== End Add Offers Modal ============================================================================================ -->
+<!-- ==================================================== End Add Project Modal ============================================================================================ -->
 @endsection

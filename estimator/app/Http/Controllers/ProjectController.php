@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use App\Http\Requests;
 use App\Project;
 
@@ -58,7 +59,7 @@ class ProjectController extends Controller
         //
         $project = Project::find($id);
         
-        return view('project/view')->with('project', $project);
+        return view('project/edit')->with('project', $project);
     }
 
     /**
@@ -82,6 +83,11 @@ class ProjectController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $project                =   Project::find($id);
+        $project->name          =   $request->get('project_name');
+        $project->description   =   $request->get('project_description');
+        $project->save();
+        return redirect('/projects');
     }
 
     /**

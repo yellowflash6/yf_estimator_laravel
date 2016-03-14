@@ -33,6 +33,10 @@ Route::group(['middleware' => 'web'], function () {
 	});
 
     Route::get('/projects', 'ProjectController@index');
+    Route::get('/projects/{id}', 'ProjectController@show');
+    Route::post('/new-project', 'ProjectController@store');
+    Route::post('/get-projects', 'ProjectController@get_projects');
+    /*Route::get('/test', 'ProjectController@get_projects');*/
 
     Route::get('/home', 'HomeController@index');
 });

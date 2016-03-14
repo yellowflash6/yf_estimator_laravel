@@ -4,7 +4,10 @@
 
 <div class="container">
 	<div class="panel panel-default">
-		<div class="panel-heading">Projects</div>
+		<div class="panel-heading">
+			<strong>List of Projects<strong>
+		</div>
+
 		<div class="table-responsive">
 			<!-- <table class="table table-hover">
 				<thead>
@@ -21,10 +24,11 @@
 				<thead>
 					<tr>
 						<th data-column-id="id" data-type="numeric">ID</th>
-						<th data-column-id="title">Offer Title</th>
+						<th data-column-id="title">Project</th>
 						<th data-column-id="description">Description</th>
-						<th data-column-id="valid_from" data-order="desc">Valid from</th>
-						<th data-column-id="valid_to" data-order="desc">Valid up to</th>
+						<th data-column-id="description">Tasks</th>
+						<th data-column-id="description">Total Man Hours</th>
+						<th data-column-id="description">Total Man Days</th>
 						<th data-column-id="status" data-order="desc">Status</th>
 						<th data-column-id="commands" data-formatter="commands" data-sortable="false">Options</th>
 					</tr>
@@ -64,17 +68,17 @@
 
 		    }).end().find(".command-delete").on("click", function(e)
 		    {
-		    	var offerID = $(this).data("row-id");
+		    	var projectID = $(this).data("row-id");
 		    	$.ajax({
-				  url: "acsoffers/delete_offer/",
-				  data : {'offer_id' : offerID},
+				  url: "delete_project/",
+				  data : {'project_id' : projectID},
 				}).done(function( msg ) 
 				{
-					offerDeleteSuccess(msg);
+					projectDeleteSuccess(msg);
 				})
     		});
     	});
-	    var offerDeleteSuccess = function(msg)
+	    var projectDeleteSuccess = function(msg)
 	    {
 	    	console.log(msg);
 			alert(msg);

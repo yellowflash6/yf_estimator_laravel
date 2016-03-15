@@ -44,7 +44,7 @@ class ProjectController extends Controller
         $project->description   =   $request->get('project_description');
         $project->status        =   1;
         $project->save();
-        return view('project/projects');
+        return redirect('/projects');
 
     }
 
@@ -107,7 +107,7 @@ class ProjectController extends Controller
      * @param null
      * @return JSON
      */
-    public function get_projects()
+    public function getProjects()
     {
         $page_index             =   1;//$request->get('current');
         $row_count              =   10;//$request->get('rowCount');
@@ -127,13 +127,22 @@ class ProjectController extends Controller
         //The new array is used as Project data.
         foreach ($arr_projects as $project)
         {
+            $url = url('project-tasks', [$project->id]);
+            $tasks = $project->tasks;
+            $total = 0;
+            foreach ($tasks as $task) 
+            {
+                # code...
+                $total += $task->dev_code_estimate+$task->dev_analysis_estimate+$task->dev_review_estimate+$task->testing_estimate
+                            +$task->sw_config_estimate+$task->documentation_estimate;
+            }
             $temp_arr = array(
                                'id'                 => $project->id,
                                'name'               => $project->name,
                                'description'        => $project->description,
-                               'tasks'              => "<a href='#'># of Tasks</a>",
-                               'total_man_hours'    => 0,
-                               'total_man_days'     => 0
+                               'tasks'              => "<a href='".$url."'>".sizeof($tasks)." Tasks</a>",
+                               'total_man_hours'    => $total,
+                               'total_man_days'     => $total/8
                             );
             
             if ($project->status)

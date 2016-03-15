@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html>
     <head>
-        <title>Be right back.</title>
+        <title>Page Not Found!</title>
 
         <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
 
@@ -36,12 +35,18 @@
                 font-size: 72px;
                 margin-bottom: 40px;
             }
+            a {
+                text-decoration: none;
+                color: #BOBEC5;
+            }
         </style>
     </head>
     <body>
         <div class="container">
             <div class="content">
-                <div class="title">Be right back.</div>
+                <div class="title">Oops!</div>
+                <h3>Seems like the page you are looking for ain't here :( </h3>
+                <h3>Click <a href="/">here</a> to go back</h3>
             </div>
         </div>
     </body>

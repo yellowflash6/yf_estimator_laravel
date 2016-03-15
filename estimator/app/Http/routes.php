@@ -32,11 +32,29 @@ Route::group(['middleware' => 'web'], function () {
     	return view('welcome');
 	});
 
-    Route::get('/projects', 'ProjectController@index');
-    Route::get('/projects/{id}', 'ProjectController@show');
-    Route::post('/new-project', 'ProjectController@store');
-    Route::post('/get-projects', 'ProjectController@get_projects');
-    Route::post('/edit-project/{id}', 'ProjectController@update');
+    /*=============================================
+    =            Projects Route block            =
+    =============================================*/
+    Route::get('/projects',             'ProjectController@index');
+    Route::get('/projects/{id}',        'ProjectController@show');
+    Route::post('/new-project',         'ProjectController@store');
+    Route::post('/get-projects',        'ProjectController@getProjects');
+    Route::post('/edit-project/{id}',   'ProjectController@update');
+    /*=====  End of Section comment block  ======*/
+    
+    /*=========================================
+    =            Tasks Route block            =
+    =========================================*/
+    Route::get('/project-tasks/{id}',    'TaskController@showTasks');
+    Route::post('/get-project-tasks/',   'TaskController@getTasks');
+    Route::post('/new-task',             'TaskController@store');
+    Route::get('/tasks/{id}',            'TaskController@show');
+    Route::post('/edit-task/{id}',       'TaskController@update');
+    /*=====  End of Tasks Route block  ======*/
+    
+
+
+
     /*Route::get('/test', 'ProjectController@get_projects');*/
 
     Route::get('/home', 'HomeController@index');

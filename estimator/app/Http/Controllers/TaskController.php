@@ -122,9 +122,9 @@ class TaskController extends Controller
      */
     public function getTasks(Request $request)
     {
-        $page_index             =   1;//$request->get('current');
-        $row_count              =   10;//$request->get('rowCount');
-        $str_search             =   "";//$request->get('searchPhrase');
+        $page_index             =   $request->get('current');
+        $row_count              =   $request->get('rowCount');
+        $str_search             =   $request->get('searchPhrase');
         $project_id             =   $request->get('project_id');
         $arr_tasks              =   Task::where('project_id', $project_id)->get();
         

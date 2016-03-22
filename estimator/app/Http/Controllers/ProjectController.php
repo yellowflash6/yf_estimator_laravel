@@ -127,11 +127,11 @@ class ProjectController extends Controller
      * @param null
      * @return JSON
      */
-    public function getProjects()
+    public function getProjects(Request $request)
     {
-        $page_index             =   1;//$request->get('current');
-        $row_count              =   10;//$request->get('rowCount');
-        $str_search             =   "";//$request->get('searchPhrase');
+        $page_index             =   $request->get('current');
+        $row_count              =   $request->get('rowCount');
+        $str_search             =   $request->get('searchPhrase');
         $arr_projects           =   Project::where('status', 1)->get();
         
         //A Counter to keep track of array index.
@@ -207,6 +207,8 @@ class ProjectController extends Controller
         $projects['total']      = sizeof($arr_projects);
         echo json_encode($projects);
     }
+
+    
 
     /**
      * Export to Excel

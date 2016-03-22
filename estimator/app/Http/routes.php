@@ -55,7 +55,7 @@ Route::group(['middleware' => 'web'], function () {
 
 
 
-    /*Route::get('/test', 'ProjectController@get_projects');*/
+    Route::get('/test/{id}', 'ProjectController@exportExcel');
 
     Route::get('/home', 'HomeController@index');
 });

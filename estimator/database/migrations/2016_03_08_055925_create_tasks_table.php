@@ -17,6 +17,8 @@ class CreateTasksTable extends Migration
             $table->increments('id');
             $table->integer('project_id')->unsigned()->default(0);
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->integer('task_id')->unsigned()->nullable();
+            $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
             $table->string('name');
             $table->text('description');
             $table->decimal('dev_code_estimate', 5, 1);

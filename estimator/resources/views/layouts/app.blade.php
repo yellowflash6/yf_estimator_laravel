@@ -88,5 +88,11 @@
     </nav>
 
     @yield('content')
+    <!-- <nav class="navbar navbar-default navbar-fixed-bottom">
+      <div class="container">
+        <a style="font-size : 14px;" class="navbar-brand" href="http://www.itflux.com">Powered by ITFlux</a>
+      </div>
+    </nav>
+ -->
 </body>
 </html>

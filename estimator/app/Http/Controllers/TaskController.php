@@ -40,16 +40,16 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         //
-        $task = new Task();
-        $task->name = $request->get('name');
-        $task->description = $request->get('description');
-        $task->project_id = $request->get('project_id');
-        $task->dev_code_estimate = $request->get('dev_code_estimate');
-        $task->dev_analysis_estimate = $request->get('dev_analysis_estimate');
-        $task->dev_review_estimate = $request->get('dev_review_estimate');
-        $task->testing_estimate = $request->get('testing_estimate');
-        $task->sw_config_estimate = $request->get('sw_config_estimate');
-        $task->documentation_estimate = $request->get('documentation_estimate');
+        $task                           =       new Task();
+        $task->name                     =       $request->get('name');
+        $task->description              =       $request->get('description');
+        $task->project_id               =       $request->get('project_id');
+        $task->dev_code_estimate        =       $request->get('dev_code_estimate');
+        $task->dev_analysis_estimate    =       $request->get('dev_analysis_estimate');
+        $task->dev_review_estimate      =       $request->get('dev_review_estimate');
+        $task->testing_estimate         =       $request->get('testing_estimate');
+        $task->sw_config_estimate       =       $request->get('sw_config_estimate');
+        $task->documentation_estimate   =       $request->get('documentation_estimate');
         $task->save();
         return redirect('project-tasks/'.$request->project_id);
 
@@ -89,16 +89,16 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-        $task                =   Task::find($id);
-        $task->name          =   $request->get('name');
-        $task->description   =   $request->get('description');
-        $task->dev_code_estimate = $request->get('dev_code_estimate');
-        $task->dev_analysis_estimate = $request->get('dev_analysis_estimate');
-        $task->dev_review_estimate = $request->get('dev_review_estimate');
-        $task->testing_estimate = $request->get('testing_estimate');
-        $task->sw_config_estimate = $request->get('sw_config_estimate');
-        $task->documentation_estimate = $request->get('documentation_estimate');
+
+        $task                           =       Task::find($id);
+        $task->name                     =       $request->get('name');
+        $task->description              =       $request->get('description');
+        $task->dev_code_estimate        =       $request->get('dev_code_estimate');
+        $task->dev_analysis_estimate    =       $request->get('dev_analysis_estimate');
+        $task->dev_review_estimate      =       $request->get('dev_review_estimate');
+        $task->testing_estimate         =       $request->get('testing_estimate');
+        $task->sw_config_estimate       =       $request->get('sw_config_estimate');
+        $task->documentation_estimate   =       $request->get('documentation_estimate');
         $task->save();
         return redirect('project-tasks/'.$request->project_id);
     }
@@ -143,18 +143,19 @@ class TaskController extends Controller
         {
             $total = $task->dev_code_estimate+$task->dev_analysis_estimate+$task->dev_review_estimate+$task->testing_estimate
                      +$task->sw_config_estimate+$task->documentation_estimate;
-            $temp_arr = array(
-                               'id'                         => $task->id,
-                               'name'                       => $task->name,
-                               'description'                => $task->description,
-                               'dev_code_estimate'          => $task->dev_code_estimate,
-                               'dev_analysis_estimate'      => $task->dev_analysis_estimate,
-                               'dev_review_estimate'        => $task->dev_review_estimate,
-                               'testing_estimate'           => $task->testing_estimate,
-                               'sw_config_estimate'         => $task->sw_config_estimate,
-                               'documentation_estimate'     => $task->documentation_estimate,
-                               'total_estimate'             => $total,
-                            );
+            $temp_arr = array
+            (
+               'id'                         => $task->id,
+               'name'                       => $task->name,
+               'description'                => $task->description,
+               'dev_code_estimate'          => $task->dev_code_estimate,
+               'dev_analysis_estimate'      => $task->dev_analysis_estimate,
+               'dev_review_estimate'        => $task->dev_review_estimate,
+               'testing_estimate'           => $task->testing_estimate,
+               'sw_config_estimate'         => $task->sw_config_estimate,
+               'documentation_estimate'     => $task->documentation_estimate,
+               'total_estimate'             => $total,
+            );
             array_push($arr_status_data, $temp_arr);
 
             $ctr++;

@@ -5,7 +5,7 @@
 <div class="container">
 	<div class="panel panel-default">
 		<div class="panel-heading">
-			<strong>List of Projects</strong>
+			<strong style="font-size:16px;">List of Projects</strong>
 			<buttton class="btn btn-success" style="margin-left:80%;" data-toggle="modal" data-target="#modalAddProject" title="Create new Project!">
 				<i class="fa fa-cog"></i>
 				<strong>New Project</strong>
@@ -33,10 +33,7 @@
 </div>
 <script type="text/javascript">
 	$(function () {
-     
-    /*var globalCSRF = {{ json_encode(array("_token" => csrf_token())) }};  
-	var token = globalCSRF._token;*/
-    var grid = $("#grid-basic").bootgrid({
+    		var grid = $("#grid-basic").bootgrid({
 		    ajax: true,
 		    post: function ()
 		    {
@@ -50,7 +47,7 @@
 		    	"commands": function(column, row)
 			    {
 			    	return "<button type=\"button\" class=\"btn btn-xs btn-default command-edit\" data-row-id=\"" + row.id + "\" title=\"View\"><span class=\"fa fa-pencil\"></span></button> " +
-			    	"<button type=\"button\" class=\"btn btn-xs btn-default command-delete\" data-row-id=\"" + row.id + "\" title=\"Delete\"><span class=\"fa fa-trash-o\"></span></button>";
+			    	"<button type=\"button\" class=\"btn btn-xs btn-default command-excel\" data-row-id=\"" + row.id + "\" title=\"Export as Excel\"><span class=\"fa fa-download\"></span></button>"
 			    }
 		    }
 	    }).on("loaded.rs.jquery.bootgrid", function()
@@ -61,7 +58,7 @@
 		    {
 		    	location.assign("/projects/"+$(this).data("row-id"));
 
-		    }).end().find(".command-delete").on("click", function(e)
+		    }).end().find(".command-excel").on("click", function(e)
 		    {
 		    	/*var projectID = $(this).data("row-id");
 		    	$.ajax({
@@ -71,7 +68,8 @@
 				{
 					projectDeleteSuccess(msg);
 				})*/
-		    	alert("Delete not implemented now! Sorry.");
+		    	location.assign("/test/"+$(this).data("row-id"));
+		    	//alert("Delete not implemented now! Sorry.");
     		});
     	});
 	    var projectDeleteSuccess = function(msg)

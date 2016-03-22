@@ -7,9 +7,29 @@ use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use App\Http\Requests;
 use App\Project;
+use Excel;
+use App\User;
 
 class ProjectController extends Controller
 {
+
+    /*=========================================
+    =            FIELD DEFINITIONS            =
+    =========================================*/
+    public $arr_field_definitions = [
+        'sl_no'                     =>  'Sl. No.',
+        'name'                      =>  'Name', 
+        'description'               =>  'description', 
+        'dev_code_estimate'         =>  'Dev. Code', 
+        'dev_analysis_estimate'     =>  'Dev. Analysis',
+        'dev_review_estimate'       =>  'Dev. Review', 
+        'testing_estimate'          =>  'Testing', 
+        'sw_config_estimate'        =>  'S/W Config.', 
+        'documentation_estimate'    =>  'Documentation'
+    ];
+    /*=====  End of FIELD DEFINITIONS  ======*/
+    
+
     /**
      * Display a listing of the resource.
      *
@@ -180,13 +200,116 @@ class ProjectController extends Controller
             $arr_rows_data = $arr_status_data;
         }
 
-
         $projects               = array();
         $projects['current']    = intval($page_index);
         $projects['rowCount']   = $row_count;
         $projects['rows']       = $arr_rows_data;
         $projects['total']      = sizeof($arr_projects);
         echo json_encode($projects);
+    }
+
+    /**
+     * Export to Excel
+     * This function will export all estimate values of a Project as an excel spreadsheet.
+     * This is done using Laravel Excel module in Laravel (http://www.maatwebsite.nl/laravel-excel)
+     */
+    public function exportExcel($id)
+    {   
+        # code...
+        $data       =   array();
+        $project    =   Project::find($id);
+        $tasks      =   $project->tasks;
+        $cur_date   =   getdate();
+        $str_date   =   $cur_date['mday'].'_'.$cur_date['month'].'_'.$cur_date['year'];
+        $filename   =   snake_case($project->name)."_estimate_".$str_date;
+        $sl_no      =   1;
+        foreach ($tasks as $task) 
+        {
+            # code...
+            $temp_array = array(
+               $this->arr_field_definitions['sl_no']                      => $sl_no,
+               $this->arr_field_definitions['name']                       => $task->name,
+               $this->arr_field_definitions['dev_code_estimate']          => floatval($task->dev_code_estimate),
+               $this->arr_field_definitions['dev_analysis_estimate']      => floatval($task->dev_analysis_estimate),
+               $this->arr_field_definitions['dev_review_estimate']        => floatval($task->dev_review_estimate),
+               $this->arr_field_definitions['testing_estimate']           => floatval($task->testing_estimate),
+               $this->arr_field_definitions['sw_config_estimate']         => floatval($task->sw_config_estimate),
+               $this->arr_field_definitions['documentation_estimate']     => floatval($task->documentation_estimate),
+            );
+            array_push($data, $temp_array);
+            $sl_no++;
+        }
+
+        /*----------  Add Formulae  ----------*/
+        $dev_column                         = $this->getColumnHeader('dev_code_estimate', $data);
+        $dev_code_estimate_formulae         = "=SUM(".$dev_column."2:".$dev_column.(sizeof($data)+1).")";
+
+        $dev_analysis_column                = $this->getColumnHeader('dev_analysis_estimate', $data);
+        $dev_analysis_estimate_formulae     = "=SUM(".$dev_analysis_column."2:".$dev_analysis_column.(sizeof($data)+1).")";
+
+        $dev_review_column                  = $this->getColumnHeader('dev_review_estimate', $data);
+        $dev_review_estimate_formulae       = "=SUM(".$dev_review_column."2:".$dev_review_column.(sizeof($data)+1).")";
+
+        $testing_column                     = $this->getColumnHeader('testing_estimate', $data);
+        $testing_estimate_formulae          = "=SUM(".$testing_column."2:".$testing_column.(sizeof($data)+1).")";
+
+        $sw_config_column                   = $this->getColumnHeader('sw_config_estimate', $data);
+        $sw_config_estimate_formulae        = "=SUM(".$sw_config_column."2:".$sw_config_column.(sizeof($data)+1).")";
+
+        $documentation_column               = $this->getColumnHeader('documentation_estimate', $data);
+        $documentation_estimate_formulae    = "=SUM(".$documentation_column."2:".$documentation_column.(sizeof($data)+1).")";
+
+        $temp_array = array(
+           $this->arr_field_definitions['sl_no']                      => '',
+           $this->arr_field_definitions['name']                       => 'Total Hours',
+           $this->arr_field_definitions['dev_code_estimate']          => $dev_code_estimate_formulae,
+           $this->arr_field_definitions['dev_analysis_estimate']      => $dev_analysis_estimate_formulae,
+           $this->arr_field_definitions['dev_review_estimate']        => $dev_review_estimate_formulae,
+           $this->arr_field_definitions['testing_estimate']           => $testing_estimate_formulae,
+           $this->arr_field_definitions['sw_config_estimate']         => $sw_config_estimate_formulae,
+           $this->arr_field_definitions['documentation_estimate']     => $documentation_estimate_formulae,
+        );
+        array_push($data, $temp_array);
+        
+        
+        /*====================================
+        =            EXCEL EXPORT            =
+        ====================================*/
+        Excel::create($filename, function($excel) use($data) {
+            $excel->sheet('Estimate', function($sheet) use($data) {
+                $sheet->fromArray($data, null, 'A1', true);
+                // Set black background
+                $sheet->row(1, function($row) {
+                    // call cell manipulation methods
+                    $row->setBackground('#DBDBDB')->setFontWeight('bold');
+
+                })->freezeFirstRow();
+                // Set auto size for sheet
+                $sheet->setAutoSize(true);
+                $sheet->row((sizeof($data)+1), function($row) {
+                    // call cell manipulation methods
+                    $row->setBackground('#DBDBDB')->setFontWeight('bold');
+                });
+
+            });
+        })->download('xls');
+        /*=====  End of EXCEL EXPORT  ======*/
+        
+    }
+
+    /**
+     * Get Excel Column Header
+     * This function will return the excel column header for the spreadsheet to be exported.
+     * This is computed based on the field name and data array with the help of which we will get the index of the key of field 
+     * and its corresponding alphabet column name.
+     */
+    public function getColumnHeader($field_name='', $data)
+    {
+        # code...
+        $alphabets = range('A', 'Z');
+        $array_headings = array_keys($data[0]);
+        $column_header = $alphabets[array_search($this->arr_field_definitions[$field_name], $array_headings)];
+        return $column_header;
     }
 
 }
